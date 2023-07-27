@@ -5,15 +5,19 @@ import LayoutWithoutNavbar from '../components/Layout/WithoutNavbar';
 import { PrivateRoute } from '../components/PrivateRoute';
 import AddBlog from './AddBlog';
 import Blog from './Blog';
+import Bookmarks from './Bookmarks';
 import EditBlog from './EditBlog';
 import LandingPage from './LandingPage';
 import LoginPage from './LoginPage';
+import UserPublishedBlogsList from './UserPublishedBlogsList';
 
 const Pages = () => {
   return (
       <Routes>
         <Route element={<LayoutWithNavbar />}>
           <Route path="/" element={<LandingPage />} />
+          <Route path="/bookmarks" element={<PrivateRoute><Bookmarks /></PrivateRoute>} />
+          <Route path="/my-blogs" element={<PrivateRoute><UserPublishedBlogsList /></PrivateRoute>} />
           <Route path="/:id" element={<Blog />} />
         </Route>
         <Route element={<LayoutWithoutNavbar />}> 
@@ -27,4 +31,4 @@ const Pages = () => {
   )
 }
 
-export default Pages
+export default Pages;
