@@ -6,6 +6,7 @@ import axios from 'axios';
 
 const LoginForm = ({handleSignUpButton}) => {
 
+  const [formData, setFormData] = useState({email: '', password: ''})
   const [showPassword, setShowPassword] = useState(false);
 
   const handleTogglePassword = () => {
@@ -14,6 +15,12 @@ const LoginForm = ({handleSignUpButton}) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log(formData);
+  }
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((formData) => ({ ...formData, [name]: value }))
   }
 
   const login = useGoogleLogin({
@@ -36,14 +43,23 @@ const LoginForm = ({handleSignUpButton}) => {
           <form className='flex flex-col justify-between items-center gap-6' onSubmit={handleSubmit}>
             <input
               type="email"
+              name='email'
               placeholder='Email'
+              value={formData.email}
+              onChange={handleChange}
               className='text-base p-3 pl-1 w-72 border-b-[1px] border-solid border-[#8b8787] outline-none focus:border-[#1ac914]' 
+              required
             />
             <div className='group flex justify-between items-center w-72'>
               <input
                 type={showPassword ? "text" : "password"}
+                name='password'
                 placeholder='Password'
+                value={formData.password}
+                onChange={handleChange}
                 className='peer text-base p-3 pl-1 w-full border-b-[1px] border-solid border-[#8b8787] outline-none focus:border-[#1ac914]' 
+                required
+                minLength={8}
                 />
               <button className='h-full border-b-[1px] border-solid border-[#8b8787] outline-none peer-focus:border-[#1ac914] text-[#8b8787]' onClick={handleTogglePassword}>
               {
