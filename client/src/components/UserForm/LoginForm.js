@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import GoogleIcon from '../../assets/google.png'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
+import { useGoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
 
 const LoginForm = ({handleSignUpButton}) => {
 
@@ -13,6 +15,18 @@ const LoginForm = ({handleSignUpButton}) => {
   const handleSubmit = (event) => {
     event.preventDefault();
   }
+
+  const login = useGoogleLogin({
+    onSuccess: async (response) => {
+      console.log(response);
+      const result = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
+        headers: {  
+        "Content-Type": 'application/json', 
+        "Authorization": `Bearer ${response.access_token}` }
+      });
+      console.log(result.data);
+    }
+  });
 
   return (
     <div className='w-[600px] h-[600px] bg-white p-6 pt-0'>
@@ -47,7 +61,7 @@ const LoginForm = ({handleSignUpButton}) => {
           </form>
         </section>
         <section className='flex flex-col items-center justify-start'>
-          <button className='w-72 p-1 rounded-full border-[1px] border-solid border-[#242424] flex flex-row items-center justify-center text-base'>
+          <button className='w-72 p-1 rounded-full border-[1px] border-solid border-[#242424] flex flex-row items-center justify-center text-base' onClick={() => login()}>
             <img src={GoogleIcon} alt='google' className='w-8 h-8 mr-4'/>
             Sign in with Google
           </button>
