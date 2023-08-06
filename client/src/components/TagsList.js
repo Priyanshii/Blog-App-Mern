@@ -12,7 +12,7 @@ const TagsList = () => {
           tagsList?.map((tag) => {
             return(
               <>
-                <Link to={"/tag/" + tag}>
+                <Link to={{ pathname: "/search", search: `?tag=${tag.toLocaleLowerCase()}` }} >
                   <span className='px-4 py-2 text-sm rounded-full bg-[#ecebeb] text-[#3b3a3a]'>
                     {tag}
                   </span>
