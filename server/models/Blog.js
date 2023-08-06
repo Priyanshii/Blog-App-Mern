@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import User from './User.js';
 
 const blogSchema = new mongoose.Schema({
   title: { 
@@ -13,12 +12,19 @@ const blogSchema = new mongoose.Schema({
     unique: true,
     trim: true,
   },
-  tags: [String],
+  tags: [{
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Tag',
+  }],
   author:  {
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'User',
     required: true,
-  }
-},{timestamps: true})
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now(),
+  },
+});
 
 export default mongoose.model('Blog', blogSchema);
