@@ -10,23 +10,39 @@ const BlogCard = ({ _id, title, content, createdAt, author, tags=null }) => {
 
   const dispatch = useDispatch();
   const plainContent = removeTags(content);
-  const { bookmarkedBlogs } = useSelector((store) => store.blog)
+
+  const { email } = useSelector((store) => store.auth.userData);
+  const { bookmarkedBlogsId, bookmarkedBlogs } = useSelector((store) => store.blog);
+
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   useEffect(() => {
+    console.log(bookmarkedBlogsId);
     setIsBookmarked((isBookmarked) => {
-      return bookmarkedBlogs.includes(_id)
+      return bookmarkedBlogsId.includes(_id)
     })
-  },[blogsSaved])
+  },[bookmarkedBlogsId])
+
+  useEffect(() => {
+    console.log(bookmarkedBlogs);
+    setIsBookmarked((isBookmarked) => {
+      return bookmarkedBlogs.some((blog) => blog._id === _id);
+    })
+  },[bookmarkedBlogs])
 
   const handleBookmarkButton = () => {
-    dispatch(BookmarkBlog(_id));
+    if(email){
+      dispatch(BookmarkBlog(_id));
+    }
+    else{
+      
+    }
   }
 
   return (
     <article className='relative w-full'>
       <button onClick={handleBookmarkButton} className='group absolute bottom-0 right-0'>
-        <BiSolidBookmark className={`${isBookmarked ? 'text-[#1A8917]' : 'text-white'} stroke-1 w-5 h-5 stroke-[#585858] group-focus:stroke-none`} />
+        <BiSolidBookmark className={`${isBookmarked ? 'text-[#1A8917] stroke-none' : 'text-white'} stroke-1 w-5 h-5 stroke-[#585858]`} />
       </button>
       <div className='flex flex-col items-start justify-start gap-4'>
         <Link to={"/author/" + author?._id}>
@@ -61,7 +77,8 @@ const BlogCard = ({ _id, title, content, createdAt, author, tags=null }) => {
             tags?.map((tag) => {
               return(
                 <>
-                  <Link to={{ pathname: "/search", search: `?tag=${tag.toLocaleLowerCase()}` }} >
+                  {/* <Link to={{ pathname: "/tag", search: `?tag=${tag.toLocaleLowerCase()}` }} >  in case of passing query in link tag */}
+                  <Link to={"/topic/" + tag}>
                     <span className='px-3 py-1 text-sm rounded-full bg-[#ecebeb] text-[#3b3a3a]'>{tag}</span>
                   </Link>
                 </>

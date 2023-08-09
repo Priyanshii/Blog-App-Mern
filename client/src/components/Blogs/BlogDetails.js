@@ -1,18 +1,45 @@
 import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
+import { deleteBlog } from '../../redux/slices/blogsSlice';
 
 const BlogDetails = () => {
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { blogDetails } = useSelector((store) => store.blog);
-  const { title, content, createdAt, author, tags } = blogDetails;
+  const { userData } = useSelector((store) => store.auth);
+  const { _id, title, content, createdAt, author, tags } = blogDetails;
   
+  const gotoIndexPage = () => {
+    navigate("/");
+  }
+
+  const handleEditButton = () => {
+    navigate(`/edit-blog/${_id}`);
+  }
+
+  const handleDeleteButton = () => {
+    dispatch(deleteBlog(_id, gotoIndexPage));
+  }
+
   return (
     <div className='flex justify-center break-words'>
-      <div className='md:max-w-2xl mx-6 w-full'>
+      <div className=' md:max-w-[52rem] mx-6 w-full'>
         <div className='flex flex-col items-start justify-normal mt-12'>
-          <section>
-          <h1 className='text-4xl font-bold'>{title}</h1>
+          <section className='w-full flex flex-row items-center justify-between'>
+            <h1 className='text-4xl font-bold w-[80%]'>{title}</h1>
+            <div className='flex items-center justify-start gap-3 text-2xl text-gray-600'>
+              {
+                author?._id === userData?._id
+                &&
+                <>
+                  <AiOutlineEdit onClick={handleEditButton} className='cursor-pointer'/> 
+                  <AiOutlineDelete onClick={handleDeleteButton} className='cursor-pointer'/>
+                </>
+              }
+            </div>
           </section>
           <section className='mt-10 flex flex-row items-center justify-start gap-2'>
             <div className=' text-base text-white rounded-full'>
@@ -35,7 +62,8 @@ const BlogDetails = () => {
             tags?.map((tag) => {
               return(
                 <>
-                  <Link to={{ pathname: "/search", search: `?tag=${tag.toLocaleLowerCase()}` }} >
+                  {/* <Link to={{ pathname: "/search", search: `?tag=${tag.toLocaleLowerCase()}` }} >  in case of passing tag as search query params*/}
+                  <Link to={"/topic/" + tag}>
                     <span className='px-3 py-1 text-sm rounded-full bg-[#ecebeb] text-[#3b3a3a]'>{tag}</span>
                   </Link>
                 </>

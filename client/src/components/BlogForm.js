@@ -38,16 +38,21 @@ const BlogForm = ({initialTitle= '', initialContent='', initialTagList=[]}) => {
 
   const handleEnterKey = (event) => {
     if(event.key === "Enter"){
-      setTagsList((tagList) => (
-        [...tagList , tag]
-      ))
+      if(tag !== ''){
+        setTagsList((tagList) => (
+          [...tagList , tag.trim()]
+        ))
+      }
       setTag('');
     }
   }
 
+  const gotoIndexPage = () => {
+    navigate("/");
+  }
+
   const handlePostButton = () => {
-    dispatch(createNewBlog({title, content, tagList}))
-    navigate('/');
+    dispatch(createNewBlog({title, content, tagList}, gotoIndexPage));
   }
 
   return (

@@ -22,7 +22,8 @@ const Pages = () => {
           <Route path="/my-blogs" element={<PrivateRoute><UserPublishedBlogsList type={1}/></PrivateRoute>} />
           <Route path="/author/:id" element={<PrivateRoute><UserPublishedBlogsList type={2}/></PrivateRoute>} />
           <Route path="/blog/:id" element={<Blog />} />
-          <Route path="/search" element={<SearchedBlogs />} />
+          <Route path="/search" element={<SearchedBlogs type="search" />} />
+          <Route path="/topic/:name" element={<SearchedBlogs type="topic" />} />
         </Route>
         <Route element={<LayoutWithoutNavbar />}> 
           <Route path="/login" element={<AnonymousRoute><LoginPage /></AnonymousRoute>} />

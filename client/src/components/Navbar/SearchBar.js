@@ -8,35 +8,48 @@ const SearchBar = () => {
   const navigate = useNavigate();
 
   const [searchParams, setSearchParams] = useSearchParams();
-
-  const tag = searchParams.get('tag');
-
+  
   const [searchValue, setSearchValue] = useState(searchParams.get("search") || '');
+  
   const handleSearch = (e) => {
     setSearchValue(e.target.value);
   }
+  
+  // const tag = searchParams.get('tag');
+  // const handleEnterKey = (e) => {
+  //   if( e.key === 'Enter'){
+  //     if(!tag){
+  //       const query = {
+  //         search: searchValue,
+  //       }
+  //       navigate({
+  //         pathname: '/search',
+  //         search: createSearchParams(query).toString()
+  //       })
+  //     }
+  //     else{
+  //       const query = {
+  //         search: searchValue,
+  //         tag: tag
+  //       }
+  //       navigate({
+  //         pathname: '/search',
+  //         search: createSearchParams(query).toString()
+  //       })
+  //     }
+  //   }
+  // }
 
   const handleEnterKey = (e) => {
-    if( e.key === 'Enter'){
-      if(!tag){
-        const query = {
-          search: searchValue,
-        }
-        navigate({
-          pathname: '/search',
-          search: createSearchParams(query).toString()
-        })
-      }
-      else{
-        const query = {
-          search: searchValue,
-          tag: tag
-        }
-        navigate({
-          pathname: '/search',
-          search: createSearchParams(query).toString()
-        })
-      }
+    if(e.key === 'Enter'){
+      searchValue !== ''
+      ?
+      navigate({
+        pathname: '/search',
+        search:  createSearchParams({search: searchValue}).toString(),
+      })
+      :
+      navigate('/');
     }
   }
 

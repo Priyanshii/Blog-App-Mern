@@ -14,7 +14,7 @@ const UserPublishedBlogsList = ({type}) => {
   useEffect(() => {
     if(type === 1){
       const userData = JSON.parse(localStorage.getItem("blog-user"));
-      dispatch(getBlogsByAuthor(userData._id));
+      dispatch(getBlogsByAuthor(_id));
     }
     else{
       dispatch(getBlogsByAuthor(params.id));

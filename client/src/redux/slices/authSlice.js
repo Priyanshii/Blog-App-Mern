@@ -118,4 +118,3 @@ export const removeUserData = () => async dispatch => {
   localStorage.removeItem("blog-user");
   dispatch(removeUser());
 }
-

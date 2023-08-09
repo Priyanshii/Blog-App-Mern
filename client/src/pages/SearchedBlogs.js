@@ -1,29 +1,31 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useSearchParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 import BlogsList from '../components/Blogs/BlogsList'
-import { getSearchedBlogs } from '../redux/slices/blogsSlice'
+import { getBlogsByTopic, getSearchedBlogs } from '../redux/slices/blogsSlice'
 
-const SearchedBlogs = () => {
+const SearchedBlogs = ({type}) => {
 
   const dispatch = useDispatch();
+  const params = useParams();
+
   const [searchParams, setSearchParams] = useSearchParams();
   const { searchedBlogs } = useSelector((store) => store.blog);
 
-  const tag = searchParams.get('tag');
   const searchInput = searchParams.get('search');
 
   useEffect(() => {
-    const query = {
-      tag: tag,
-      search: searchInput,
+    if(type === "search"){
+      dispatch(getSearchedBlogs(searchInput));
     }
-    dispatch(getSearchedBlogs(query));
-  },[searchParams])
+    else{
+      dispatch(getBlogsByTopic(params.name));
+    }
+  },[searchParams, params.name, type])
 
   return (
     <div className='p-14 flex flex-col items-start justify-start gap-4'>
-      <h1 className='font-semibold tracking-wider text-3xl text-[#333131]'>Results for {tag} {searchInput}</h1>
+      <h1 className='font-semibold tracking-wider text-3xl text-[#333131]'>Results for {params.name} {searchInput}</h1>
       <div className='w-full h-[1px] bg-[#f0eeee] mt-6'></div>
       <div className='flex justify-start w-full'>
         <BlogsList blogsList={searchedBlogs}/>
