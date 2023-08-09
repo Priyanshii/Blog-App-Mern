@@ -18,10 +18,10 @@ export const getBlogs = async (req, res) => {
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
-}
+  }
 
-export const getBlogDetails = async (req, res) => {
-  const { id } = req.params;
+  export const getBlogDetails = async (req, res) => {
+    const { id } = req.params;
   try {
     const post = await Blog.findById(id).populate("author");
     res.status(200).json(post);
@@ -29,21 +29,43 @@ export const getBlogDetails = async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 }
-  
+
 export const createBlog = async (req, res) => {
   const blogData = req.body;
   console.log(blogData)
   console.log(req.user);
-  const tagList = req.body.tags.map((tag) => {
-    return { "name": tag };
-  });
-
+  
   try {
-    const blog = await Blog.create({ ...blogData, tags: tagList, author: req.user._id });
-    res.status(201).json(blog);
+    const response = await Blog.create({ ...blogData, author: req.user._id });
+    res.status(201).json(response);
   } catch (error) {
     console.log(error);
     res.status(409).json({ message: error.message });
+  }
+}
+
+export const updateBlog = async (req, res) => {
+    const { id } = req.params;
+    const blogData = req.body;
+
+    try {
+      const response = await Blog.findByIdAndUpdate(id, blogData, { new: true });
+      res.status(201).json(response);
+    } catch (error) {
+      res.status(404).json({ message: error.message });
+    }
+    
+    res.json(updatedPost);
+  }
+  
+export const deleteBlog = async (req, res) => {
+  const { id } = req.params;
+  
+  try {
+    const response = await Blog.findByIdAndRemove(id);
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
   }
 }
 
@@ -64,11 +86,26 @@ export const getBlogsByAuthor = async (req, res) => {
 }
 
 export const getBlogsBySearch = async (req, res) => {
-    const {tag, search} = req.query;
+    let { search } = req.query;
 
     try {
       const searchInput = new RegExp(search, "i");
-      const blogs = await Blog.find({ $and: [{ searchInput }, {tags: { $in : [tag]}}] }).populate("author");
+      // const blogs = await Blog.find({ $text: {$search: search}}, {tags: tag}).populate("author");
+      const blogs = await Blog.find({ $or: [{'title':  { "$regex": searchInput} }, {'content':  { "$regex": searchInput }}, {'tags': { "$regex": searchInput}}] }).populate("author");
+
+      res.status(200).json({ data: blogs });
+
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
+export const getBlogsByTopic = async (req, res) => {
+    const { name } = req.params;
+
+    try {
+      const blogs = await Blog.find({tags: name}).populate("author");
+
       res.status(200).json({ data: blogs });
 
     } catch (error) {
@@ -78,39 +115,52 @@ export const getBlogsBySearch = async (req, res) => {
 
 export const saveUnsaveBlog = async (req, res) => {
 
+  try {
   const user = await User.findById(req.user._id)
   const post = await Blog.findById(req.params.id);
 
-  try {
     if(user.blogsSaved.includes(post._id.toString())){
       user.blogsSaved = user.blogsSaved.filter((p) => p.toString() !== post._id.toString());
       await user.save();
 
-      return res.status(200).json({ success: true, message: "Post Unsaved"});
+      return res.status(200).json({data: user.blogsSaved, success: true, message: "Post Unsaved"});
     }
     else {
-      user.blogsSaved.push(post._id)
-
+      user.blogsSaved.push(post._id);
       await user.save();
-      return res.status(200).json({ success: true, message: "Post Saved"});
+
+      return res.status(200).json({data: user.blogsSaved, success: true, message: "Post Saved"});
     }
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
 }
 
-// export const updatePost = async (req, res) => {
-//     const { id } = req.params;
-//     const { title, message, creator, selectedFile, tags } = req.body;
+export const getBookmarkedBlogs = async (req, res) => {
 
-//     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
+  try {
+    const user = await User.findById(req.user._id);
+    const data = await Blog.find({ '_id': { $in: user.blogsSaved } }).populate("author").sort({ createdAt: -1 });
 
-//     const updatedPost = { creator, title, message, tags, selectedFile, _id: id };
+    return res.status(200).json({data: data, success: true});
+  } catch (error) {
+      res.status(404).json({ message: error.message });
+  }
+}
 
-//     await PostMessage.findByIdAndUpdate(id, updatedPost, { new: true });
+export const getPopularTags = async (req, res) => {
 
-//     res.json(updatedPost);
-// }
+  try {
+    const user = await User.findById(req.user._id);
+    console.log(user.blogsSaved);
+    const data = await Blog.find({ '_id': { $in: user.blogsSaved } }).populate("author").sort({ createdAt: -1 });
+
+    return res.status(200).json({data: data, success: true});
+  } catch (error) {
+      res.status(404).json({ message: error.message });
+  }
+}
+
 
 // export const deletePost = async (req, res) => {
 //     const { id } = req.params;

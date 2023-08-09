@@ -5,16 +5,18 @@ const blogSchema = new mongoose.Schema({
     type: String, 
     required: true,
     trim: true,
+    index: true,
   },
   content: { 
     type: String, 
     required: true,
     unique: true,
     trim: true,
+    index: true,
   },
   tags: [{
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Tag',
+    type: String,
+    index: true,
   }],
   author:  {
     type: mongoose.Schema.Types.ObjectId, 
@@ -26,5 +28,5 @@ const blogSchema = new mongoose.Schema({
     default: Date.now(),
   },
 });
-
+// blogSchema.index({title: 'text', content: 'text', tags: 'text'});
 export default mongoose.model('Blog', blogSchema);
