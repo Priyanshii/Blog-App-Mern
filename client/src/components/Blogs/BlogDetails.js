@@ -7,6 +7,7 @@ import { BiSolidLike } from 'react-icons/bi';
 import { MdOutlineModeComment } from 'react-icons/md';
 import { deleteBlog, likeBlog, resetBlogDetails } from '../../redux/slices/blogsSlice';
 import LoadingComponent from '../LoadingComponent';
+import { toast } from "react-toastify";
 
 const BlogDetails = () => {
 
@@ -40,7 +41,12 @@ const BlogDetails = () => {
   }
 
   const handleLikeButton = () => {
-    dispatch(likeBlog(_id));
+    if(userData?.email){
+      dispatch(likeBlog(_id));
+    }
+    else{
+      toast.info('Please Login');
+    }
   }
 
   return (
