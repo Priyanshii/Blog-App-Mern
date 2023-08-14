@@ -22,6 +22,9 @@ const BlogsList = ({blogsData, callback}) => {
         loading && <LoadingComponent />    
       }
       {
+        !loading
+        &&
+        (
         blogsList.length > 0
         ?
         <>
@@ -48,6 +51,7 @@ const BlogsList = ({blogsData, callback}) => {
         <div className='w-full flex flex-col justify-start items-start text-base font-medium text-[#585858]'>
           <span> No blog</span>
         </div>
+        )
       }
       </main>
     </>

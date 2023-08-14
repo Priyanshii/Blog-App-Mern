@@ -60,7 +60,7 @@ const BlogDetails = () => {
           _id
           ?
           <>
-            <div className='flex flex-col items-start justify-normal mt-12'>
+            <div className='flex flex-col items-start justify-normal my-12'>
               <section className='w-full flex flex-row items-center justify-between'>
                 <h1 className='text-4xl font-bold w-[80%] mb-4'>{title}</h1>
                 <div className='flex items-center justify-start gap-3 text-2xl'>

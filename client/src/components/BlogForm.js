@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { createNewBlog, updateBlog } from '../redux/slices/blogsSlice';
@@ -9,7 +8,7 @@ import { GrFormClose } from 'react-icons/gr';
 const modules = {
   toolbar: [
     [{ header: '1' }, { header: '2' }, { header: [3, 4] }],
-    [{ 'size': ['small', 'normal', 'large', 'huge'] }],  
+    [{ 'size': [ 'normal'] }],  
     ['bold', 'italic', 'underline', 'strike', 'blockquote',],  
     [{ 'script': 'sub'}, { 'script': 'super' }],
     [{ 'color': [] }, { 'background': [] }], 
