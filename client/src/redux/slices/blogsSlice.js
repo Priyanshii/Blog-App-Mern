@@ -110,6 +110,10 @@ const blogsSlice = createSlice({
       state.loading = false;
       state.error = {isError: true, message: payload};
     },
+    resetBookmarkedBlogsId: (state, {payload}) => {
+      state.bookmarkedBlogsId = [];
+      state.error = {isError: false, message: ''};  
+    },
     setSearchedBlogsSuccess: (state, { payload })=>{
       state.loading = false;
       state.searchedBlogs.blogsList = [...state.searchedBlogs.blogsList, ...payload.data];
@@ -145,7 +149,7 @@ const blogsSlice = createSlice({
   },
 });
 
-export const { setLoading, addBlogSuccess, addBlogFailure, setBlogsSuccess, setBlogsFailure, resetBlogs, setBlogDetailsSuccess, setBlogDetailsFailure, resetBlogDetails, setBlogLikesNumber, setMostPopularTopicsSuccess, setMostPopularTopicsFailure, setBookmarkedBlogSuccess, setBookmarkedBlogFailure, resetBookmarkedBlogs, setBookmarkedBlogIdSuccess, setBookmarkedBlogIdFailure, setSearchedBlogsSuccess, setSearchedBlogsFailure, resetSearchedBlogs, setUserPublishedBlogsSuccess, setUserPublishedBlogsFailure, resetUserPublishedBlogs } = blogsSlice.actions;
+export const { setLoading, addBlogSuccess, addBlogFailure, setBlogsSuccess, setBlogsFailure, resetBlogs, setBlogDetailsSuccess, setBlogDetailsFailure, resetBlogDetails, setBlogLikesNumber, setMostPopularTopicsSuccess, setMostPopularTopicsFailure, setBookmarkedBlogSuccess, setBookmarkedBlogFailure, resetBookmarkedBlogs, resetBookmarkedBlogsId, setBookmarkedBlogIdSuccess, setBookmarkedBlogIdFailure, setSearchedBlogsSuccess, setSearchedBlogsFailure, resetSearchedBlogs, setUserPublishedBlogsSuccess, setUserPublishedBlogsFailure, resetUserPublishedBlogs } = blogsSlice.actions;
 
 export default blogsSlice.reducer;
 
@@ -316,8 +320,8 @@ export const getBookmarkedBlogsId = () => async(dispatch) => {
     console.log(error);
     if(error.response.status === 401){
       dispatch(removeUserData());
+      dispatch(resetBookmarkedBlogsId());
     }
-    toast.error(error.response.data.message);
     dispatch(setBookmarkedBlogIdFailure(error.response.data.message));
   }
 }
