@@ -137,7 +137,12 @@ export const verifyToken = async(id_token) => {
 
 export const signout = async(req, res) => {
   try {
-    res.clearCookie("token");
+    res.cookie('token', null, {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+      sameSite: 'none', 
+      secure: true
+    });
     res.status(201).json({message: "Successfully logged out"});
   } catch (error) {
     res.status(500).json({ message: "Something went wrong"});
