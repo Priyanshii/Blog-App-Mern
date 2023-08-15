@@ -306,6 +306,22 @@ export const BookmarkBlog = (id) => async(dispatch) => {
   }
 }
 
+export const getBookmarkedBlogsId = () => async(dispatch) => {
+  try {
+    const response = await axios.get(`/blog/bookmarksId`);
+    console.log(response.data);
+    dispatch(setBookmarkedBlogIdSuccess(response.data.data));
+ 
+  } catch (error) {
+    console.log(error);
+    if(error.response.status === 401){
+      dispatch(removeUserData());
+    }
+    toast.error(error.response.data.message);
+    dispatch(setBookmarkedBlogIdFailure(error.response.data.message));
+  }
+}
+
 export const getBookmarkedBlogs = (page) => async(dispatch) => {
   if (page === undefined){
     dispatch(resetBookmarkedBlogs());
