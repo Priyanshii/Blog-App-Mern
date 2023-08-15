@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import ReactQuill from 'react-quill';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { createNewBlog, updateBlog } from '../redux/slices/blogsSlice';
+import { createNewBlog, updateBlog, getAllBlogs } from '../redux/slices/blogsSlice';
 import { GrFormClose } from 'react-icons/gr'; 
 
 const modules = {
@@ -49,6 +49,7 @@ const BlogForm = ({type, authorId, blogId, initialTitle= '', initialContent='', 
 
   const gotoIndexPage = () => {
     navigate("/", { replace: true });
+    dispatch(getAllBlogs());
   }
 
   const handlePostButton = () => {

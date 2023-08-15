@@ -5,7 +5,7 @@ import { MdDelete } from 'react-icons/md';
 import { HiPencil } from 'react-icons/hi';
 import { BiSolidLike } from 'react-icons/bi';
 import { MdOutlineModeComment } from 'react-icons/md';
-import { deleteBlog, likeBlog, resetBlogDetails } from '../../redux/slices/blogsSlice';
+import { deleteBlog, likeBlog, resetBlogDetails, getAllBlogs } from '../../redux/slices/blogsSlice';
 import LoadingComponent from '../LoadingComponent';
 import { toast } from "react-toastify";
 
@@ -30,6 +30,7 @@ const BlogDetails = () => {
   
   const gotoIndexPage = () => {
     navigate("/", { replace: true });
+    dispatch(getAllBlogs());
   }
 
   const handleEditButton = () => {
@@ -47,6 +48,10 @@ const BlogDetails = () => {
     else{
       toast.info('Please Login');
     }
+  }
+
+  const handleCommentButton = () => {
+    toast.info('Work in progress');
   }
 
   return (
@@ -75,18 +80,20 @@ const BlogDetails = () => {
                 </div>
               </section>
               <section className='my-6 flex flex-row items-center justify-start gap-2'>
-                <div className='text-base text-white rounded-full'>
-                  {
-                    author?.imgUrl 
-                    ?
-                    <img src={author.imgUrl} alt={author?.name.charAt(0)} className='w-8 h-8 rounded-full object-contain'/>
-                    : 
-                    author?.name.charAt(0)
-                    &&
-                    <span className='bg-[#1A8917] px-3 py-1 rounded-full text-white font-medium text-base '>{author?.name.charAt(0)}</span>
-                  }
-                </div>
-                <span className='text-base font-semibold mx-1'>{author?.name}</span>
+                <Link className='flex items-center justify-start gap-2' to={"/author/" + author?._id}>
+                  <div className='text-base text-white rounded-full'>
+                    {
+                      author?.imgUrl 
+                      ?
+                      <img src={author.imgUrl} alt={author?.name.charAt(0)} className='w-8 h-8 rounded-full object-contain'/>
+                      : 
+                      author?.name.charAt(0)
+                      &&
+                      <span className='bg-[#1A8917] hover:bg-[#105a0f] w-9 h-9 flex items-center justify-center rounded-full text-white font-medium text-base'>{author?.name.charAt(0)}</span>
+                    }
+                  </div>
+                  <span className='text-base font-semibold mx-1'>{author?.name}</span>
+                </Link>
                 <span className='text-[#c4bebe]'>&#8226;</span>
                 <span className='text-sm text-[#585858]'>{createdAt?.split('T')[0]}</span>
               </section>
@@ -99,7 +106,7 @@ const BlogDetails = () => {
                   <span className='text-sm'>{blogLikesNumber.length}</span>
                 </section>
                 <section className='flex items-center justify-start gap-2'>
-                  <button className='p-1'>
+                  <button onClick={handleCommentButton} className='p-1'>
                     <MdOutlineModeComment className='text-xl text-[#a19d9d]'/>
                   </button>
                   {/* <span className='text-sm'>2</span> */}

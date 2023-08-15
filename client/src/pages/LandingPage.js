@@ -12,10 +12,6 @@ const LandingPage = () => {
   const handleShowMoreButton = () => {
     dispatch(getAllBlogs(blogsData.currentPage + 1))
   }
-  
-  useEffect(() => {
-    dispatch(getAllBlogs());
-  },[])
 
   return (
     <div className='block m-auto max-w-[1336px]'>

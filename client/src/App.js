@@ -4,7 +4,7 @@ import Pages from "./pages";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { getUserSuccess } from "./redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { getBookmarkedBlogs, getPopularTopicsList } from "./redux/slices/blogsSlice";
+import { getBookmarkedBlogs, getPopularTopicsList, getAllBlogs } from "./redux/slices/blogsSlice";
 import { ToastContainer } from "react-toastify";
 
 function App() {
@@ -16,6 +16,7 @@ function App() {
     dispatch(getUserSuccess(JSON.parse(userData)));
     dispatch(getPopularTopicsList());
     dispatch(getBookmarkedBlogs());
+    dispatch(getAllBlogs());
   },[email])
 
   return (
