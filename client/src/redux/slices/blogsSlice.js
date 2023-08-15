@@ -89,12 +89,14 @@ const blogsSlice = createSlice({
       state.error = {isError: true, message: payload};
     },
     setBookmarkedBlogSuccess: (state, { payload }) => {
+      state.loading = false;
       state.bookmarkedBlogs.blogsList = [...state.bookmarkedBlogs.blogsList, ...payload.data];
       state.bookmarkedBlogs.totalPages = payload.numberOfPages;
       state.bookmarkedBlogs.currentPage = payload.current;
       state.error = {isError: false, message: ''};
     },
     setBookmarkedBlogFailure: (state, { payload }) => {
+      state.loading = false;
       state.error = {isError: true, message: payload};
     },
     resetBookmarkedBlogs: (state, {payload}) => {
@@ -330,6 +332,7 @@ export const getBookmarkedBlogs = (page) => async(dispatch) => {
   if (page === undefined){
     dispatch(resetBookmarkedBlogs());
   }
+  dispatch(setLoading(true));
   try {
     const response = await axios.get(`/blog/bookmarks`,{
       params:{

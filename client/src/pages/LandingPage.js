@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import BlogsList from '../components/Blogs/BlogsList';
 import TagsList from '../components/TagsList';
-import { getAllBlogs, getBookmarkedBlogs, getPopularTopicsList } from '../redux/slices/blogsSlice';
+import { getAllBlogs } from '../redux/slices/blogsSlice';
 
 const LandingPage = () => {
 
