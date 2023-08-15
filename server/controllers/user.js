@@ -137,7 +137,7 @@ export const verifyToken = async(id_token) => {
 
 export const signout = async(req, res) => {
   try {
-    res.cookie('token', null, {
+    res.clearCookie('token', {
       expires: new Date(Date.now()),
       httpOnly: true,
       sameSite: 'none', 
