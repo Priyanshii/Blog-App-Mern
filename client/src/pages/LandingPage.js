@@ -8,7 +8,7 @@ const LandingPage = () => {
 
   const dispatch = useDispatch();
   const { blogsData } = useSelector((store) => store.blog);
-  
+
   const handleShowMoreButton = () => {
     dispatch(getAllBlogs(blogsData.currentPage + 1))
   }
@@ -16,7 +16,7 @@ const LandingPage = () => {
   return (
     <div className='block m-auto max-w-[1336px]'>
       <div className='flex flex-row md:justify-evenly justify-start flex-wrap w-full'>
-        <BlogsList blogsData={blogsData} callback={handleShowMoreButton}/>
+        <BlogsList blogsData={blogsData} callback={handleShowMoreButton} />
         <TagsList />
       </div>
     </div>
